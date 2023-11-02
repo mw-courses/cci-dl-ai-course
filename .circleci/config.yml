@@ -19,7 +19,7 @@ workflows:
     jobs:
       - run-evals:
           context:
-            - dl-ai-course
+            - dl-ai-courses
 
 jobs:
   run-evals:  # This is the name of the job, feel free to change it to better match what you're trying to do!
