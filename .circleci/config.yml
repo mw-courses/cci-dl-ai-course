@@ -57,7 +57,7 @@ jobs:
           steps:
             - run:
                 name: Run release evals.
-                command: python -m pytest test_release.py
+                command: python -m pytest test_release_evals.py
       - when:
           condition:
             and:
