@@ -3,7 +3,10 @@ version: 2.1
 orbs:
   python: circleci/python@2.1.1
 
-
+parameters:
+  eval-mode:
+    type: string
+    default: "commit"
 
 workflows:
   evalaute-app:  # This is the name of the workflow, feel free to change it to better match your workflow.
