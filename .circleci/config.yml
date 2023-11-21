@@ -16,17 +16,18 @@ workflows:
       - run-commit-evals:
           context:
             - dl-ai-courses
-      - hold: # A job that will require manual approval in the CircleCI web application.
-          requires: 
-            - run-commit-evals
-          type: approval # This key-value pair will set your workflow to a status of "On Hold"
       # Note: In a real application, you'd run these on commits to the main branch
       # for this course, we're using a parameter instead.
       - run-pre-release-evals:
+          when:
+            equal: [ release, << pipeline.parameters.eval-mode >> ]
           context:
             - dl-ai-courses
-          requires:
-            - hold
+      - run-manual-evals:
+          when:
+            equal: [ full, << pipeline.parameters.eval-mode >> ]
+          context:
+            - dl-ai-courses
 
 jobs:
   run-commit-evals:  # This is the name of the job, feel free to change it to better match what you're trying to do!
@@ -74,3 +75,15 @@ jobs:
       - run:
           name: Run release evals.
           command: python -m pytest test_release_evals.py
+  run-manual-evals: 
+    docker:
+      - image: cimg/python:3.10.5
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+          # app-dir: ~/project/package-directory/  # If your requirements.txt isn't in the root directory.
+          # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
+      - run:
+          name: Run end to end evals.
+          command: python -m pytest test_assistant.py test_release_evals.py
