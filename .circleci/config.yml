@@ -8,7 +8,6 @@ parameters:
     type: string
     default: "commit"
 
-
 workflows:
   evalaute-app:  # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
@@ -17,11 +16,17 @@ workflows:
       - run-commit-evals:
           context:
             - dl-ai-courses
+      - hold: # A job that will require manual approval in the CircleCI web application.
+          requires: 
+            - run-commit-evals
+          type: approval # This key-value pair will set your workflow to a status of "On Hold"
       # Note: In a real application, you'd run these on commits to the main branch
       # for this course, we're using a parameter instead.
       - run-pre-release-evals:
           context:
             - dl-ai-courses
+          requires:
+            - hold
 
 jobs:
   run-commit-evals:  # This is the name of the job, feel free to change it to better match what you're trying to do!
@@ -69,5 +74,3 @@ jobs:
       - run:
           name: Run release evals.
           command: python -m pytest test_release_evals.py
-
-
