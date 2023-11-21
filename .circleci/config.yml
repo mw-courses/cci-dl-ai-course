@@ -19,9 +19,17 @@ workflows:
       # Note: In a real application, you'd run these on commits to the main branch
       # for this course, we're using a parameter instead.
       - run-pre-release-evals:
+          when:
+            condition:
+              and:
+                equal: [ release, << pipeline.parameters.eval-mode >> ]
           context:
             - dl-ai-courses
       - run-manual-evals:
+          when:
+            condition:
+              and:
+                equal: [ full, << pipeline.parameters.eval-mode >> ]
           context:
             - dl-ai-courses
 
@@ -56,36 +64,30 @@ jobs:
     # Change the version below to your required version of python
     docker:
       - image: cimg/python:3.10.5
-    # only run this "eval-mode" = "release"
-    when:
-      equal: [ release, << pipeline.parameters.eval-mode >> ]
-
-        # Checkout the code as the first step. This is a dedicated CircleCI step.
-        # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
-        # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
-        # Then run your tests!
-        # CircleCI will report the results back to your VCS provider.
-        steps:
-          - checkout
-          - python/install-packages:
-              pkg-manager: pip
-              # app-dir: ~/project/package-directory/  # If your requirements.txt isn't in the root directory.
-              # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
-          - run:
-              name: Run release evals.
-              command: python -m pytest test_release_evals.py
+    # Checkout the code as the first step. This is a dedicated CircleCI step.
+    # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
+    # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
+    # Then run your tests!
+    # CircleCI will report the results back to your VCS provider.
+    
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+          # app-dir: ~/project/package-directory/  # If your requirements.txt isn't in the root directory.
+          # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
+      - run:
+          name: Run release evals.
+          command: python -m pytest test_release_evals.py
   run-manual-evals: 
     docker:
       - image: cimg/python:3.10.5
-    # only run this "eval-mode" = "full"
-    when:
-      equal: [ full, << pipeline.parameters.eval-mode >> ]
-        steps:
-          - checkout
-          - python/install-packages:
-              pkg-manager: pip
-              # app-dir: ~/project/package-directory/  # If your requirements.txt isn't in the root directory.
-              # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
-          - run:
-              name: Run end to end evals.
-              command: python -m pytest test_assistant.py test_release_evals.py
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+          # app-dir: ~/project/package-directory/  # If your requirements.txt isn't in the root directory.
+          # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
+      - run:
+          name: Run end to end evals.
+          command: python -m pytest test_assistant.py test_release_evals.py
