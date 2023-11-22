@@ -99,7 +99,7 @@ jobs:
           # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
       - run:
           name: Save eval to html file
-          command: python save_eval_artifacts
+          command: python save_eval_artifacts.py
       - store_artifacts:
           path: /tmp/eval_results.html
           destination: eval_results.html
