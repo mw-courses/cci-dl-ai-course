@@ -67,7 +67,6 @@ Question 2:{delimiter} <question 2>
 
 Question 3:{delimiter} <question 3>
 
-If the user asks about a subject that is not in a supported category or subject, say "I'm sorry I do not have information about that"
 """
 
 def assistant_chain():
