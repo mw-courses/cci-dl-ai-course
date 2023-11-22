@@ -45,7 +45,7 @@ jobs:
                 name: Run assistant evals.
                 # We are running pytest with the `-s` flag which includes print output.
                 # In a real pipeline, you would not print output, but we include it here for teaching purposes.
-                command: python -m pytest -s test_hallucination.py
+                command: python -m pytest -s test_hallucinations.py
       - when:
           condition:
             and:
