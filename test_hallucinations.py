@@ -1,4 +1,4 @@
-from app import assistant_chain
+from app import assistant_chain, quiz_information_bank
 
 from langchain.prompts                import ChatPromptTemplate
 from langchain.chat_models            import ChatOpenAI
