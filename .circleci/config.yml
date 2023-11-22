@@ -82,8 +82,8 @@ jobs:
           # app-dir: ~/project/package-directory/  # If your requirements.txt isn't in the root directory.
           # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
       - run:
-        name: Run end to end evals.
-        command: python -m pytest test_assistant.py test_release_evals.py
+          name: Run end to end evals.
+          command: python -m pytest test_assistant.py test_release_evals.py
   store-eval-artifacts:
     docker:
       - image: cimg/python:3.10.5
