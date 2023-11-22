@@ -1,3 +1,5 @@
+
+from app import assistant_chain
 # In a real application you would load your dataset from a file or logging tool.
 # Here we have a mix of examples with slightly different phrasing that our quiz application can support
 # and things we don't support. 

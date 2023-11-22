@@ -1,3 +1,5 @@
+from app import assistant_chain
+
 from langchain.prompts                import ChatPromptTemplate
 from langchain.chat_models            import ChatOpenAI
 from langchain.schema.output_parser   import StrOutputParser
