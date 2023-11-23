@@ -8,7 +8,6 @@ parameters:
     type: string
     default: "commit"
 
-
 workflows:
   evaluate-app:  # This is the name of the workflow - feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
@@ -17,11 +16,17 @@ workflows:
       - run-commit-evals:
           context:
             - dl-ai-courses
+      - hold: # A job that will require manual approval in the CircleCI web application.
+          requires: 
+            - run-commit-evals
+          type: approval # This key-value pair will set your workflow to a status of "On Hold"
       # Note: In a real application, you'd run these on commits to the main branch
       # for this course, we're using a parameter instead.
       - run-pre-release-evals:
           context:
             - dl-ai-courses
+          requires:
+            - hold
 
 jobs:
   run-commit-evals:  # This is the name of the job - feel free to change it to better match what you're trying to do!
@@ -47,7 +52,7 @@ jobs:
           name: Run assistant evals.
           command: python -m pytest test_assistant.py
   run-pre-release-evals:  # This is the name of the job - feel free to change it to better match what you're trying to do!
-    # These next lines defines the Docker executor: https://circleci.com/docs/2.0/executor-types/
+    # These next lines define the Docker executor: https://circleci.com/docs/2.0/executor-types/
     # You can specify an image from Docker Hub or use one of the convenience images from CircleCI's Developer Hub
     # A list of available CircleCI Docker convenience images is available here: https://circleci.com/developer/images/image/cimg/python
     # The executor is the environment in which the steps below will be executed - below will use a Python 3.10 container
